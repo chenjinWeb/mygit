@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>今日头条</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/menulist.css">
+    <script>
+        (function(_window){
+            var docEl = _window.document.documentElement,
+                    resizeEvt = 'orientationchange' in _window ? 'orientationchange' : 'resize';
+            function s() {
+                var clientWidth = docEl.clientWidth;
+                docEl.style.fontSize = 100 * (clientWidth /414) + 'px';
+            }
+            _window.addEventListener(resizeEvt, s, false);
+            s();
+        })(window);
+    </script>
+    <script src="js/lib/zepto.js"></script>
+</head>
+<body>
+
+    <div class="head">
+
+        <div class="head_title">
+
+            频道管理
+
+        </div>
+
+        <a href="index.html"></a>
+
+    </div>
+
+    <div>
+        <div class="msg">点击删除频道</div>
+        <div class="menu_list">
+            <ul id="topMenu">
+                <!--<li class="fix_menu" data-value="all">推荐</li>-->
+            </ul>
+        </div>
+    </div>
+
+    <div class="msg">点击添加以下频道</div>
+
+    <div class="menu_list">
+        <ul id="bottomMenu">
+            <!--<li>推荐</li>-->
+        </ul>
+    </div>
+
+    <script src="js/menulist.js"></script>
+
+</body>
+</html>

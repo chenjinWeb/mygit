@@ -1,0 +1,28 @@
+body{ height: auto;}
+[v-cloak] { display: none;}
+#indexHeader{display: block;  z-index: 999;  overflow: hidden;  position: fixed;  top: 0;  left: 0;  right: 0;  height: 0.45rem;  }
+#mobile_frame{min-width:100%; width: 1px !important; *width:100%; height: 100%; padding-top: 0.8rem; border: none;}
+.top_bar{ height: 0.45rem; background: #ea0606; position: relative;}
+.top_bar a{ color: #fff;}
+.abs_h{ width: 100%; text-align: center; color: #FFFFFF; font-weight: 700; height: 100%;}
+.refresh_title{ background: url("../img/menudom_title.png") no-repeat; display: inline-block; margin-top: 0.11rem; width: 1.2rem; height: 0.25rem; background-size: cover; font-size: 0.16rem;}
+.search{ width: 0.3rem; height: 0.3rem; display: block; background: url("../img/header_back.png") no-repeat 50%; background-size: 80%;}
+.abs_r{ position: absolute; left: 0.1rem; top: 50%; margin-top: -0.15rem;}
+.menu_dom{ margin-top: 0.45rem; padding: 0 0.2rem 0.1rem;}
+.menu_list{ height: 1.0rem; width: 100%; display: flex;}
+.menu_img{ padding: 0.15rem 0.1rem 0.1rem 0; width: 0.9rem; height: 1.0rem;}
+.menu_img img{ width: 0.7rem; height: 0.7rem;}
+.menu_text{ padding: 0.15rem 0; height: 1.0rem; flex: 1; border-bottom: 1px solid #eaeaea; position: relative;}
+.menu_text h2{ font-size: 0.17rem; height: 0.2rem; margin-bottom: 0.1rem;}
+.menu_text p{ max-width: 2.8rem;  font-size: 0.14rem; height: 0.2rem; color: #b1b1b1;}
+.menu_text p.des_p{ overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
+.menu_btn{ position: absolute; width: 0.66rem; height: 0.29rem; background: url("../img/btn.png") no-repeat; background-size: cover; text-align: center; line-height: 0.29rem; color: #0b68ff; top: 0.15rem; right: 0; font-size: 0.14rem; text-decoration: none;   }
+
+#loadMore{background:url("../img/loading.gif") center center no-repeat;position:fixed;top:0;bottom:0;left:0;right:0;z-index:1000;display: none;}
+
+
+
+
+
+
+

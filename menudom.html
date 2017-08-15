@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui" charset="UTF-8">
+    <title>MORE分享</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/menudom.css">
+    <script>
+        (function(_window){
+            var docEl = _window.document.documentElement,
+                    resizeEvt = 'orientationchange' in _window ? 'orientationchange' : 'resize';
+            function s() {
+                var clientWidth = docEl.clientWidth;
+                docEl.style.fontSize = 100 * (clientWidth /414) + 'px';
+            }
+            _window.addEventListener(resizeEvt, s, false);
+            s();
+        })(window);
+    </script>
+</head>
+<body id="oBody" v-cloak>
+
+    <header id="indexHeader">
+        <div class="top_bar">
+            <div class="abs_h">
+                <a href="javascript:;" class="refresh_title btn"></a>
+            </div>
+            <div class="abs_r">
+                <a href="menu.html" class="btn search"></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="menu_dom">
+        <div class="menu_list" v-for="appList in appLists">
+            <div class="menu_img">
+                <img :src="appList.logo_url" width="100%" height="100%">
+            </div>
+            <div class="menu_text">
+                <h2>{{appList.title}}</h2>
+                <p>{{appList.file_size? appList.file_size+"M" : ""}}</p>
+                <p class="des_p">{{appList.remark}}</p>
+                <a :href="appList.app_rrl" class="menu_btn">安装</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadMore"></div>
+
+    <div class="noMore" v-show="appLists.length==0"></div>
+
+    <script src="js/lib/zepto.js"></script>
+    <script src="js/lib/vue.min.js"></script>
+    <script src="js/menudom.js"></script>
+    <script>
+
+        $(function(){
+            menuJs.menuDomFn();
+        });
+
+    </script>
+
+</body>
+</html>

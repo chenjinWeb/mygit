@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui" charset="UTF-8">
+    <title>推荐-全网头条</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/dropload.css">
+    <script>
+        (function(_window){
+            var docEl = _window.document.documentElement,
+                    resizeEvt = 'orientationchange' in _window ? 'orientationchange' : 'resize';
+            function s() {
+                var clientWidth = docEl.clientWidth;
+                docEl.style.fontSize = 100 * (clientWidth /414) + 'px';
+            }
+            _window.addEventListener(resizeEvt, s, false);
+            s();
+        })(window);
+    </script>
+</head>
+<body id="oBody" v-cloak>
+
+    <header id="indexHeader">
+        <div class="top_bar">
+            <div class="abs_h">
+                <a href="javascript:;" class="refresh_title btn"></a>
+            </div>
+            <div class="abs_r">
+
+                <input type="text" placeholder="请输入要查找的内容" v-model="searchText">
+
+                <span id="searchBtn"></span>
+
+            </div>
+        </div>
+
+        <div class="top_menu_bar" id="top_menu">
+            <div class="top_menu_list" id="top_menu_row">
+                <a class="btn" v-for="menulist in menulists" :name="menulist.channelId" @click="tabInfo($event)" v-if="menulist!=strDate">{{menulist.channelName}}</a>
+            </div>
+            <div class="top_menu_more">
+                <a href="menulist.html" class="more_btn"></a>
+            </div>
+        </div>
+    </header>
+
+    <!--<div class="hasNoData" v-if="newsDatas.length<1">
+
+        <p>暂无数据</p>
+
+    </div>-->
+    <!--头条-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='toutiao'">
+        <ul>
+            <li v-for="tou in toutiao" class="opacity" v-if="tou.ImgUrl1 && tou.ImgUrl2 && tou.ImgUrl3">
+                <a :href="tou.YunUrl" class="n-item-link" v-if="!tou.isAd">
+                    <div class="new-title">{{tou.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="tou.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="tou.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="tou.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{tou.Source? tou.Source : "全网发"}}</span>
+                            <span>{{tou.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <div v-if="tou.isAd && isMobile">
+
+                    <div v-html="tou.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<div v-if="tou.isAd" v-html="tou.adContent">
+
+                </div>
+
+                <div class="news_desc" v-if="tou.isAd && isMobile">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                </div>-->
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--社会-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='shehui'">
+        <ul>
+            <li v-for="she in shehui" class="opacity" v-if="she.ImgUrl1 && she.ImgUrl2 && she.ImgUrl3">
+
+                <a :href="she.YunUrl" class="n-item-link">
+                    <div class="new-title">{{she.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="she.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="she.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="she.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{she.Source? she.Source : "全网发"}}</span>
+                            <span>{{she.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <div v-if="she.isAd && isMobile">
+
+                    <div v-html="she.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--国内-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='guonei'">
+        <ul>
+            <li v-for="guo in guonei" class="opacity" v-if="guo.ImgUrl1 && guo.ImgUrl2 && guo.ImgUrl3">
+
+                <a :href="guo.YunUrl" class="n-item-link">
+                    <div class="new-title">{{guo.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="guo.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="guo.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="guo.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{guo.Source? guo.Source : "全网发"}}</span>
+                            <span>{{guo.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <div v-if="guo.isAd && isMobile">
+
+                    <div v-html="guo.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--国际-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='guoji'">
+        <ul>
+            <li v-for="ji in guoji" class="opacity" v-if="ji.ImgUrl1 && ji.ImgUrl2 && ji.ImgUrl3">
+
+                <a :href="ji.YunUrl" class="n-item-link">
+                    <div class="new-title">{{ji.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="ji.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="ji.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="ji.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{ji.Source? ji.Source : "全网发"}}</span>
+                            <span>{{ji.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="ji.isAd && isMobile">
+
+                    <div v-html="ji.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--娱乐-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='yule'">
+        <ul>
+            <li v-for="yu in yule" class="opacity" v-if="yu.ImgUrl1 && yu.ImgUrl2 && yu.ImgUrl3">
+
+                <a :href="yu.YunUrl" class="n-item-link">
+                    <div class="new-title">{{yu.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="yu.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="yu.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="yu.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{yu.Source? yu.Source : "全网发"}}</span>
+                            <span>{{yu.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="yu.isAd && isMobile">
+
+                    <div v-html="yu.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--体育-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='tiyu'">
+        <ul>
+            <li v-for="ti in tiyu" class="opacity" v-if="ti.ImgUrl1 && ti.ImgUrl2 && ti.ImgUrl3">
+
+                <a :href="ti.YunUrl" class="n-item-link">
+                    <div class="new-title">{{ti.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="ti.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="ti.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="ti.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{ti.Source? ti.Source : "全网发"}}</span>
+                            <span>{{ti.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="ti.isAd && isMobile">
+
+                    <div v-html="ti.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--军事-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='junshi'">
+        <ul>
+            <li v-for="jun in junshi" class="opacity" v-if="jun.ImgUrl1 && jun.ImgUrl2 && jun.ImgUrl3">
+
+                <a :href="jun.YunUrl" class="n-item-link">
+                    <div class="new-title">{{jun.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="jun.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="jun.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="jun.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{jun.Source? jun.Source : "全网发"}}</span>
+                            <span>{{jun.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="jun.isAd && isMobile">
+
+                    <div v-html="jun.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--科技-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='keji'">
+        <ul>
+            <li v-for="ke in keji" class="opacity" v-if="ke.ImgUrl1 && ke.ImgUrl2 && ke.ImgUrl3">
+
+                <a :href="ke.YunUrl" class="n-item-link">
+                    <div class="new-title">{{ke.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="ke.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="ke.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="ke.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{ke.Source? ke.Source : "全网发"}}</span>
+                            <span>{{ke.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="ke.isAd && isMobile">
+
+                    <div v-html="ke.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--财经-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='caijing'">
+        <ul>
+            <li v-for="cai in caijing" class="opacity" v-if="cai.ImgUrl1 && cai.ImgUrl2 && cai.ImgUrl3">
+
+                <a :href="cai.YunUrl" class="n-item-link">
+                    <div class="new-title">{{cai.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="cai.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="cai.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="cai.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{cai.Source? cai.Source : "全网发"}}</span>
+                            <span>{{cai.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="cai.isAd && isMobile">
+
+                    <div v-html="cai.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--时尚-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='shishang'">
+        <ul>
+            <li v-for="shi in shishang" class="opacity" v-if="shi.ImgUrl1 && shi.ImgUrl2 && shi.ImgUrl3">
+
+                <a :href="shi.YunUrl" class="n-item-link">
+                    <div class="new-title">{{shi.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="shi.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="shi.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="shi.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{shi.Source? shi.Source : "全网发"}}</span>
+                            <span>{{shi.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="shi.isAd && isMobile">
+
+                    <div v-html="shi.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--游戏-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='youxi'">
+        <ul>
+            <li v-for="you in youxi" class="opacity" v-if="you.ImgUrl1 && you.ImgUrl2 && you.ImgUrl3">
+
+                <a :href="you.YunUrl" class="n-item-link">
+                    <div class="new-title">{{you.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="you.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="you.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="you.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{you.Source? you.Source : "全网发"}}</span>
+                            <span>{{you.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="you.isAd && isMobile">
+
+                    <div v-html="you.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+
+                </div>
+
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--汽车-->
+    <div class="news_show" :id="dataValue" v-if="dataValue=='qiche'">
+        <ul>
+            <li v-for="qi in qiche" class="opacity" v-if="qi.ImgUrl1 && qi.ImgUrl2 && qi.ImgUrl3">
+
+                <a :href="qi.YunUrl" class="n-item-link">
+                    <div class="new-title">{{qi.Title}}</div>
+                    <div class="news_img">
+                        <div class="img">
+                            <img :src="qi.ImgUrl1">
+                        </div>
+                        <div class="img">
+                            <img :src="qi.ImgUrl2">
+                        </div>
+                        <div class="img">
+                            <img :src="qi.ImgUrl3">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{qi.Source? qi.Source : "全网发"}}</span>
+                            <span>{{qi.PublishTime}}</span>
+                        </span>
+                    </div>
+                </a>
+                <div v-if="qi.isAd && isMobile">
+
+                    <div v-html="qi.adContent">
+
+                    </div>
+
+                    <div class="news_desc">
+                    <span class="info">
+                        <span class="info_tise">广告</span>
+                    </span>
+                    </div>
+                </div>
+                <!--<a v-bind:href="newsData.url" class="n-item-link" v-if="newsData.thumb.length>1">
+                    <div class="new-title">{{newsData.title}}</div>
+                    <div class="news_img">
+                        <div class="img" v-for="newsimg in newsData.thumb">
+                            <img v-bind:src="newsimg">
+                        </div>
+                    </div>
+                    <div class="news_desc">
+                        <span class="info">
+                            <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                            <span>{{getLocalTime(newsData.time)}}</span>
+                        </span>
+                    </div>
+                </a>
+
+                <a v-bind:href="newsData.url" class="n-item-link n-single-pic" v-if="newsData.thumb.length==1">
+                    <div class="img" v-for="newsimg in newsData.thumb">
+                        <img v-bind:src="newsimg">
+                    </div>
+                    <div class="n-info">
+                        <div class="n-title">{{newsData.title}}</div>
+                        <div class="news_desc">
+                            <span class="info">
+                                <span>{{newsData.author? newsData.author : "全网发"}}</span>
+                                <span>{{getLocalTime(newsData.time)}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>-->
+            </li>
+        </ul>
+    </div>
+
+    <!--<div id="showFrame">
+        <iframe src="https://cpu.baidu.com/1022/faafba87" id="mobile_frame"></iframe>
+    </div>-->
+
+    <div class="back-top">
+        <a class="scroll-top">
+            <i class="icon"></i>
+        </a>
+    </div>
+
+    <!--底部的信息-->
+    <!--<div id="force_download" class="force_download">
+        <img id="force_download_img" src="http://quanwangtoutiao.b0.upaiyun.com/img/logo_ad.png">
+        <div class="force_download_text">
+            <p class="force_download_title" data-node="appName">全网发</p>
+            <p class="force_download_desc">一款全民都能赚钱的APP</p>
+        </div>
+        <a href="javascript:$('#force_download').css('display','none');$('.page').css('margin-bottom','0rem');">
+            <img class="force_download_close" src="http://m.china.com.cn/images/app/appDownClosed.png">
+        </a>
+        <a href="http://www.quanwangfa.com/quanwangfa.apk" target="_blank">
+            <span id="down_btn" class="force_download_btn">打开查看</span>
+        </a>
+    </div>-->
+
+    <div class="bottom_menu">
+
+        <a class="active">
+
+            <span class="bottom_index"></span>
+            <p>首页</p>
+
+        </a>
+
+        <a href="menu.html" class="active">
+
+            <span class="bottom_more"></span>
+
+            <p>MORE分享</p>
+
+        </a>
+
+    </div>
+
+    <div id="force_download" class="force_mobile" v-if="banner_show">
+
+        <a :href="randomArr[randomNum].href">
+            <img :src="randomArr[randomNum].src">
+        </a>
+
+        <span @click="closeInfo()"></span>
+
+    </div>
+
+    <!-- jQuery1.7以上 或者 Zepto 二选一，不要同时都引用 -->
+    <script src="js/lib/zepto.js"></script>
+    <script src="js/lib/dropload.min.js"></script>
+    <script src="js/lib/isScroll.js"></script>
+    <script src="js/lib/fx.js"></script>
+    <script src="js/lib/vue.min.js"></script>
+    <script src="js/index.js"></script>
+    <!---->
+
+    <script>
+        $(function(){
+            indexJs.indexFn();
+        });
+
+    </script>
+
+</body>
+</html>

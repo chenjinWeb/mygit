@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimal-ui" charset="UTF-8">
+    <title>MORE分享</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <script>
+        (function(_window){
+            var docEl = _window.document.documentElement,
+                    resizeEvt = 'orientationchange' in _window ? 'orientationchange' : 'resize';
+            function s() {
+                var clientWidth = docEl.clientWidth;
+                docEl.style.fontSize = 100 * (clientWidth /414) + 'px';
+            }
+            _window.addEventListener(resizeEvt, s, false);
+            s();
+        })(window);
+    </script>
+</head>
+<body id="oBody" v-cloak>
+
+    <header id="indexHeader">
+        <div class="top_bar">
+            <div class="abs_h">
+                <a href="javascript:;" class="refresh_title btn"></a>
+            </div>
+            <div class="abs_r">
+                <a href="index.html" class="btn search"></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="menu_content">
+
+        <div class="menu_game" v-for="categoryList in categoryLists">
+            <div class="menu_height game">
+                <img :src="categoryList.icon_url">
+                <span>{{categoryList.name}}</span>
+                <a :href="'menudom.html?category_id='+categoryList.id+'&id=0'">更多+</a>
+            </div>
+            <div class="menu_lists">
+                <div v-for="item in categoryList.category" track-by="$index">
+                    <a :href="'menudom.html?category_id='+categoryList.id+'&id='+item.id">{{item.title}}</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="loadMore"></div>
+
+    <script src="js/lib/zepto.js"></script>
+    <script src="js/lib/vue.min.js"></script>
+    <script src="js/menu.js"></script>
+    <script>
+        $(function(){
+            menuJs.menuFn();
+        });
+
+    </script>
+
+</body>
+</html>
